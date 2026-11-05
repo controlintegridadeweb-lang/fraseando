@@ -1,0 +1,13 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
+  "python.terminal.activateEnvironment": true,
+  "files.encoding": "utf8",
+  "files.exclude": {
+    "**/__pycache__": true
+  },
+  "search.exclude": {
+    ".venv": true,
+    ".models": true
+  }
+}
+

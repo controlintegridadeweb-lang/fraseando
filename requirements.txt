@@ -1,0 +1,6 @@
+streamlit==1.50.0
+faster-whisper==1.2.1
+# PyAV 19 removeu metadata_errors, utilizado pelo decoder do Faster Whisper 1.2.1.
+av==16.1.0
+imageio-ffmpeg==0.6.0
+rapidfuzz==3.14.1

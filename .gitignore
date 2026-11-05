@@ -1,0 +1,10 @@
+.env
+__pycache__/
+.pytest_cache/
+.venv/
+*.pyc
+.models/
+saidas/
+*.mp3
+*.mp4
+*.wav

@@ -1,0 +1,15 @@
+[server]
+address = "127.0.0.1"
+maxUploadSize = 512
+maxMessageSize = 512
+headless = true
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+primaryColor = "#C45C16"
+backgroundColor = "#FBF4ED"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#2F1E14"
+font = "sans serif"

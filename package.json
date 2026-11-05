@@ -1,0 +1,9 @@
+{
+  "name": "fraseando-local",
+  "private": true,
+  "version": "1.1.0",
+  "type": "module",
+  "scripts": {
+    "test:web": "node --test tests/browser_utils.test.mjs"
+  }
+}

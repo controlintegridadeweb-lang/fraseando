@@ -1,0 +1,16 @@
+---
+description: Regras do Fraseando para transcrição local gratuita
+alwaysApply: true
+---
+- Responda em português, com informações verificáveis.
+- O aplicativo local usa Python + Streamlit + Faster Whisper. O site estático em docs/ usa Transformers.js com Worker, FFmpeg.wasm e IndexedDB; não publique o Streamlit na internet.
+- Preserve a transcrição local. Não introduza provedores pagos, chaves de API ou login sem solicitação explícita.
+- O padrão é large-v3 com CPU int8; CUDA float16 é uma opção explícita.
+- O primeiro download de modelo requer internet. O modo offline usa local_files_only=True.
+- Nunca afirme 98% de precisão sem comparar a saída original com referência humana do mesmo áudio.
+- Não confunda testes com simulação do motor com validação de reconhecimento real ou de precisão.
+- Preserve o texto original para WER. Exportações TXT/Markdown usam o editor; SRT/VTT usam os segmentos originais.
+- Não indexe ou envie gravações, modelos e saídas para serviços externos.
+- Execute os testes Python e Node: python iniciar.py --testar; o navegador Playwright é opt-in.
+- Verificação com modelo real é opcional e deve declarar modelo, áudio e limitações.
+

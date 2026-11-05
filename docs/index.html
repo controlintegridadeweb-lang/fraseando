@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fraseando — Transforme sua gravação em texto</title>
+  <meta name="description" content="Envie um áudio ou vídeo e transcreva no navegador, sem enviar seus arquivos para um servidor.">
+  <style>
+    :root {
+      --orange: #C45C16;
+      --orange-dark: #9A3412;
+      --text: #2F1E14;
+      --muted: #6B4A38;
+      --line: #E8D5C4;
+      --canvas: #FBF4ED;
+      --surface: #FFFFFF;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background: var(--canvas);
+    }
+    .banner { background: #fff; line-height: 0; overflow: hidden; aspect-ratio: 2000 / 393; }
+    .banner img { width: 100%; height: auto; display: block; }
+    .steps {
+      background: var(--orange); color: #fff; display: flex; flex-wrap: wrap;
+      justify-content: center; gap: .9rem 2.4rem; padding: .9rem 1.5rem; font-weight: 600;
+    }
+    .steps span { display: inline-flex; align-items: center; gap: .5rem; }
+    .steps em {
+      font-style: normal; width: 1.45rem; height: 1.45rem; border: 1.5px solid #fff;
+      border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: .78rem;
+    }
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem clamp(1.5rem, 6vw, 3rem) 3rem; }
+    h1 { font-size: 1.85rem; margin: 0 0 .5rem; }
+    .lead { color: var(--muted); line-height: 1.55; margin: 0 0 1.4rem; }
+    .note {
+      background: #F8EDE3; border: 1px solid var(--line); border-radius: 12px;
+      padding: 1rem 1.15rem; margin: 0 0 1.4rem; line-height: 1.5;
+    }
+    .note h2 { font-size: 1.05rem; margin: 0 0 .35rem; }
+    .note p { margin: 0; color: var(--muted); }
+    .note .acoes-mini { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .8rem; }
+    .note .acoes-mini button { width: auto; margin-top: 0; padding: .55rem .9rem; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .card {
+      background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--orange);
+      border-radius: 12px; padding: 1.15rem 1.2rem 1.25rem;
+    }
+    .card h2 { font-size: 1.15rem; margin: 0 0 .7rem; }
+    label { display: block; font-weight: 600; margin: .7rem 0 .35rem; }
+    input[type="file"], select, textarea, button, audio {
+      width: 100%; font-family: inherit;
+    }
+    select, textarea, input[type="number"] {
+      border: 1px solid var(--line); border-radius: 8px; padding: .55rem .7rem; background: #fff;
+    }
+    .check {
+      display: flex; align-items: center; gap: .5rem; margin-top: .9rem; font-weight: 600;
+    }
+    .check input { width: auto; }
+    .ajuda { color: var(--muted); font-size: .82rem; font-weight: 500; margin: .25rem 0 0; }
+    textarea { min-height: 220px; }
+    button {
+      margin-top: 1rem; background: var(--orange); color: #fff; border: 0; border-radius: 8px;
+      padding: .75rem 1rem; font-weight: 700; cursor: pointer;
+    }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    button.secondary { background: #fff; color: var(--orange); border: 1px solid var(--orange); }
+    .acoes { display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem; }
+    .transcription-actions { display: flex; gap: .65rem; }
+    .transcription-actions button { flex: 1; }
+    .transcription-actions button.secondary { max-width: 12rem; }
+    code { font-family: ui-monospace, Consolas, monospace; }
+    a { color: #93330F; }
+    #status { color: var(--muted); min-height: 1.4em; margin-top: .8rem; }
+    progress { width: 100%; margin-top: .5rem; accent-color: var(--orange); }
+    #trechos { white-space: pre-wrap; color: var(--muted); font-size: .92rem; }
+    footer { background: #C2410C; color: #FFE8D6; }
+    footer .inner {
+      max-width: 1100px; margin: 0 auto; padding: 2rem clamp(1.5rem, 6vw, 3rem) 1.6rem;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem 2rem;
+    }
+    footer h3 { color: #fff; margin: 0 0 .45rem; font-size: 1.12rem; font-weight: 700; }
+    footer p { margin: 0; line-height: 1.5; font-size: .95rem; }
+    footer .copy {
+      background: #9A3412; text-align: center; margin: 0;
+      padding: .9rem 1rem 1.1rem; font-size: .82rem;
+      border-top: 1px solid rgba(255,255,255,.35);
+    }
+    @media (max-width: 768px) {
+      .grid, .acoes, footer .inner { grid-template-columns: 1fr; }
+      .steps { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="banner">
+      <img src="cabecalho.png" alt="Fraseando — Transforme áudios e vídeos em texto de forma rápida e fácil.">
+    </div>
+    <nav class="steps" aria-label="Etapas">
+      <span><em>1</em> Escolher gravação</span>
+      <span><em>2</em> Transcrever</span>
+      <span><em>3</em> Revisar e baixar</span>
+    </nav>
+  </header>
+  <main>
+    <h1>Transforme sua gravação em texto</h1>
+    <p class="lead">Envie um áudio ou vídeo e deixe a transcrição por nossa conta. Tudo acontece diretamente no seu navegador, sem enviar seus arquivos para um servidor.</p>
+    <div class="note">
+      <h2>Sua privacidade em primeiro lugar</h2>
+      <p>O áudio é processado no aparelho e não é enviado a um serviço de transcrição. O navegador baixa bibliotecas e modelos de terceiros pela internet. Em caso de interrupção, textos parciais e metadados ficam no armazenamento local até concluir ou descartar; o arquivo de áudio não fica salvo ali.</p>
+    </div>
+    <div class="note" id="retomada" hidden>
+      <h2>Há uma transcrição interrompida</h2>
+      <p id="retomada-texto"></p>
+      <div class="acoes-mini">
+        <button type="button" id="continuar">Continuar de onde parou</button>
+        <button type="button" id="descartar" class="secondary">Descartar progresso</button>
+      </div>
+    </div>
+    <div class="grid">
+      <section class="card">
+        <h2>1. Escolher gravação</h2>
+        <p>MP3 ou MP4, até 512 MB. Gravações grandes são recortadas em partes, quando o navegador suporta essa operação; o desempenho depende da memória disponível. É possível retomar partes concluídas selecionando o mesmo arquivo.</p>
+        <label for="arquivo">Arquivo</label>
+        <input id="arquivo" type="file" accept="audio/mpeg,audio/mp3,video/mp4,.mp3,.mp4">
+        <audio id="preview" controls hidden></audio>
+      </section>
+      <section class="card">
+        <h2>2. Transcrever</h2>
+        <label for="modelo">Modelo no navegador</label>
+        <select id="modelo">
+          <option value="tiny" selected>Tiny · mais leve, primeira vez mais rápida</option>
+          <option value="base">Base · equilíbrio</option>
+          <option value="small">Small · mais qualidade neste navegador</option>
+        </select>
+        <label class="check" for="dividir">
+          <input id="dividir" type="checkbox" checked>
+          Dividir gravações longas
+        </label>
+        <p class="ajuda">Partes de até 8 minutos reduzem o pico de memória, mas não garantem execução em aparelhos com pouca RAM. Arquivos longos são divididos automaticamente. Para reconhecimento mais avançado com Large v3, abra a versão local do projeto e execute <code>python iniciar.py</code>.</p>
+        <label for="minutos">Cada parte, no máximo (minutos)</label>
+        <input id="minutos" type="number" min="1" max="8" value="8" step="1">
+        <div class="transcription-actions">
+          <button id="iniciar" type="button" disabled>Iniciar transcrição</button>
+          <button id="cancelar" type="button" class="secondary" hidden disabled>Cancelar</button>
+        </div>
+        <p id="status" role="status" aria-live="polite">Escolha um arquivo para começar.</p>
+        <progress id="barra" max="1" value="0" aria-label="Progresso do processamento" hidden></progress>
+      </section>
+    </div>
+    <section class="card" id="resultado" hidden style="margin-top:1.2rem">
+      <h2>3. Revisar e baixar</h2>
+      <label for="editor">Texto transcrito (editável)</label>
+      <textarea id="editor"></textarea>
+      <input type="hidden" id="original">
+      <div class="acoes">
+        <button id="baixar-txt" type="button" class="secondary">Baixar texto (.txt)</button>
+        <button id="baixar-md" type="button" class="secondary">Baixar Markdown (.md)</button>
+        <button id="baixar-srt" type="button" class="secondary">Baixar legenda (.srt)</button>
+        <button id="baixar-vtt" type="button" class="secondary">Baixar legenda (.vtt)</button>
+      </div>
+      <p>TXT e Markdown usam o texto editado. SRT e VTT mantêm os trechos reconhecidos originalmente. O áudio selecionado só é liberado da prévia quando a transcrição termina.</p>
+      <div id="trechos"></div>
+    </section>
+  </main>
+  <footer>
+    <div class="inner">
+      <div>
+        <h3>Conte com a gente!</h3>
+        <p>O reconhecimento de áudio ocorre neste aparelho, sem serviço pago de transcrição.</p>
+      </div>
+      <div>
+        <h3>Como funciona</h3>
+        <p>Tudo acontece diretamente no seu navegador, sem precisar instalar nada.</p>
+      </div>
+      <div>
+        <h3>Sua privacidade</h3>
+        <p>Áudio não fica no histórico local; textos parciais podem permanecer para retomada até serem descartados.</p>
+      </div>
+    </div>
+    <p class="copy">Fraseando · Transcrição simples, rápida e gratuita.</p>
+  </footer>
+  <script type="module" src="app.js?v=20261104e"></script>
+  <script>
+    function mostrarErroPagina(texto) {
+      var status = document.getElementById("status");
+      if (status && texto) status.textContent = "Erro no navegador: " + texto;
+    }
+    window.addEventListener("error", function (evento) {
+      mostrarErroPagina(evento.message);
+    });
+    window.addEventListener("unhandledrejection", function (evento) {
+      var motivo = evento.reason;
+      mostrarErroPagina((motivo && (motivo.message || String(motivo))) || "falha não tratada");
+    });
+  </script>
+</body>
+</html>

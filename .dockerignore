@@ -1,0 +1,11 @@
+.env
+.venv
+__pycache__
+.pytest_cache
+*.pyc
+.models
+saidas
+.git
+*.mp3
+*.mp4
+*.wav

@@ -1,0 +1,9 @@
+.venv/
+.models/
+saidas/
+.env
+*.mp3
+*.mp4
+*.wav
+__pycache__/
+

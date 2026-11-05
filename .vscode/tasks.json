@@ -1,0 +1,111 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Fraseando: instalar",
+      "type": "process",
+      "command": "python3",
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.12",
+          "iniciar.py",
+          "--instalar"
+        ]
+      },
+      "args": [
+        "iniciar.py",
+        "--instalar"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Fraseando: executar",
+      "type": "process",
+      "command": "python3",
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.12",
+          "iniciar.py"
+        ]
+      },
+      "args": [
+        "iniciar.py"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
+      "label": "Fraseando: testar",
+      "type": "process",
+      "command": "python3",
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.12",
+          "iniciar.py",
+          "--testar"
+        ]
+      },
+      "args": [
+        "iniciar.py",
+        "--testar"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Fraseando: diagnóstico",
+      "type": "process",
+      "command": "python3",
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.12",
+          "iniciar.py",
+          "--diagnostico"
+        ]
+      },
+      "args": [
+        "iniciar.py",
+        "--diagnostico"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Fraseando: baixar Large v3",
+      "type": "process",
+      "command": "python3",
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.12",
+          "iniciar.py",
+          "--baixar-modelo",
+          "large-v3"
+        ]
+      },
+      "args": [
+        "iniciar.py",
+        "--baixar-modelo",
+        "large-v3"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
